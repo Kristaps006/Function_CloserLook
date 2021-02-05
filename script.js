@@ -96,7 +96,7 @@ document.body.addEventListener('click', high5);
  */
 
 //----------FUCNTIONS RETURN NEW FUNCTIONS-------
-
+/* 
 const greet = function (greeting) {
   return function (name) {
     console.log(`${greeting} ${name} ${name}`);
@@ -113,3 +113,119 @@ const greetMe = greets => firstName =>
   console.log(`${firstName} and ${greets}`);
 
 greetMe('Kris')('you');
+ */
+//---------//-----------
+
+//-------- THE CALL AND APPLY METHOD ---------
+
+// --- CALL METHOD ---
+const lufthansa = {
+  airline: 'lufthansa',
+  iataCode: 'LH',
+  bookings: [],
+  book(filghtNum, name) {
+    console.log(
+      `${name} booked a seat on ${this.airline}flight ${this.iataCode}${filghtNum}`
+    );
+    this.bookings.push({ flight: `${this.iataCode}${filghtNum}`, name });
+  },
+};
+
+lufthansa.book(234, 'krist mincans');
+lufthansa.book(345, 'theodor');
+
+const eurowings = {
+  airline: 'Eurowing',
+  iataCode: 'EW',
+  bookings: [],
+};
+
+const book = lufthansa.book; // <--lufthansa book function
+
+//book(23, 'kris min'); // --wont work because it has a -this.keyword and it points to undefine.
+// you need a binding method to call the function --bellow answer
+
+book.call(eurowings, 23, 'kristaps mincans');
+// whatever we pass it this will refer to first element -eurowing this case
+console.log(eurowings);
+
+book.call(lufthansa, 25, 'theodors mincans');
+console.log(lufthansa);
+
+const swiss = {
+  airline: 'Swiss airlines',
+  iataCode: 'EW',
+  bookings: [],
+};
+
+book.call(swiss, 583, 'Mary Cooper');
+
+//---APPLY METHOD --- //  --applies for the array
+
+const flightData = [583, 'george cooper'];
+book.apply(swiss, flightData);
+console.log(swiss);
+
+book.call(swiss, ...flightData); // we get the same result from call method
+
+//both logs  script.js:167 {airline: "Swiss airlines", iataCode: "EW", bookings: Array(2)}
+
+//----------- BIND METHOD-----------------
+//---------- Functioons ----------------
+//Bind does not imediatlly call function but it returns new function where  -this keyword is bound
+// Bind allows us manually set -this keyword for any fucntion call
+
+//book.call(eurowings, 23, 'kristaps mincans');
+
+//this will return new function that will always BE SET TO EUROWINGS
+
+const bookNew = book.bind(eurowings);
+const bookLH = book.bind(lufthansa);
+const bookLX = book.bind(swiss);
+bookNew(23, 'Steven Williams');
+
+const bookEW23 = book.bind(eurowings, 23); // we can preset some arguments like 23 -flightNum
+bookEW23('Marianne Have');
+bookEW23('Ilgonis');
+
+// With event listeners
+
+lufthansa.planes = 300;
+lufthansa.buyPlane = function () {
+  console.log(this);
+
+  this.planes++;
+  console.log(this.planes);
+};
+//lufthansa.buyPlane();
+
+//adding .bind behind function will connect this keyword to lufthansa
+document
+  .querySelector('.buy')
+  .addEventListener('click', lufthansa.buyPlane.bind(lufthansa));
+
+//Partial application-------------
+// it means pre-setting parameters
+
+const addTax = (rate, value) => value + value * rate;
+console.log(addTax(0.1, 200));
+
+const addVat = addTax.bind(null, 0.23); // we use -null -instead of this -keyword
+//const addVat = value => value + value * 0.23 // this will be the same as above
+console.log(addVat(100));
+
+const addTaxRate = function (rate) {
+  return function (value) {
+    return value + value * rate;
+  };
+};
+const addVat2 = addTaxRate(0.23); // rate is pre-set
+console.log(addVat2(100)); //logs 123
+console.log(addVat2(23)); // logs 28.29
+
+/* const tax = rate => value => console.log(`${rate}` * `${value}`);
+
+tax(0.1)(200);
+const addSkat = tax.bind(null, 23);
+addSkat(100)(10);
+ */
