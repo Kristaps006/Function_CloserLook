@@ -116,7 +116,7 @@ greetMe('Kris')('you');
  */
 //---------//-----------
 
-//-------- THE CALL AND APPLY METHOD ---------
+/* //-------- THE CALL AND APPLY METHOD ---------
 
 // --- CALL METHOD ---
 const lufthansa = {
@@ -229,3 +229,95 @@ tax(0.1)(200);
 const addSkat = tax.bind(null, 23);
 addSkat(100)(10);
  */
+
+//-------------------Immediatly invoked function expressions--------------------------------
+
+/* const runOne = function () {
+  console.log('this will never run again ');
+};
+runOne();
+
+//This is called immediately invoked function
+
+(function () {
+  console.log('this will never run'); // This is function value wrapped with paranteses
+})();
+
+(() => console.log('this will never run'))(); // The same as above
+ */
+//-------------------CLOSURE--------------------------------
+
+// Closure:VE attached to the function, exactly as it was in the time and place the funciton was created
+// A funcion has access to the variable environment of th eexecution contect in which it was created
+
+/* const secureBooking = function () {
+  let passangerCount = 0;
+
+  return function () {
+    passangerCount++;
+    console.log(`${passangerCount} passangers`);
+  };
+};
+
+const booker = secureBooking();
+
+booker();
+booker();
+booker();
+booker();
+
+console.dir(booker); // this is way to take a look inside the closure function
+ */
+/* let f;
+
+const g = function () {
+  const a = 23;
+  f = function () {
+    console.log(a * 2);
+  };
+};
+
+const h = function () {
+  const b = 777;
+  f = function () {
+    console.log(b * 2);
+  };
+};
+
+g();
+f();
+
+// Re-assinged f function
+h();
+f();
+console.dir(f);
+
+//Example 2
+
+const boardPassangers = function (n, wait) {
+  const perGroup = n / 3;
+
+  setTimeout(function () {
+    console.log(`we are now boading all ${n} passangers `);
+    console.log(`there are 3 groups ,each with ${perGroup} passangers`);
+  }, wait * 1000);
+  console.log(`Will start Boarding in ${wait} seconds`);
+};
+const perGroup = 1000;
+
+boardPassangers(180, 3);
+ */
+
+//---------------- CODING CHALLANGE ----
+
+/* (function () {
+  const header = document.querySelector('h1');
+  header.style.color = 'red';
+  const body = document.querySelector('body').addEventListener('click', e => {
+    header.style.color = 'blue';
+  });
+})(); */
+
+/* const body = document.querySelector('body').addEventListener('click', e => {
+  document.querySelector('h1').style.color = 'blue';
+}); */
